@@ -42,4 +42,3 @@ curl -X POST https://<your-site>.netlify.app/.netlify/functions/create-issue \
   -H 'Content-Type: application/json' \
   -d '{"title":"Тестовое issue","body":"Создано через API","labels":"bug","assignees":""}'
 
-
