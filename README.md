@@ -1,43 +1,41 @@
-# Форма для создания issue (с автоматическим бекендом)
+# Форма для создания issue (с автоматическим бекендом на Netlify)
 
 В папке `docs/` находится статическая страница с формой для создания issue в репозитории `qzstatick/.github`.
 
-Два режима работы
+Режимы
 
-1. Открыть страницу GitHub (по умолчанию): форма перенаправляет на стандартную страницу создания issue на GitHub с предзаполненными полями. Это не требует токенов.
-2. Автоматически (через backend): форма отправляет POST-запрос на ваш серверный эндпоинт, который вызывает GitHub API и создаёт issue от имени сервиса (используется секретный токен).
+- redirect — открывает стандартную страницу создания issue на GitHub с предзаполненными полями (не требует токенов).
+- auto — отправляет POST-запрос на Netlify Function `/.netlify/functions/create-issue`, которая создаст issue через GitHub API от имени сервиса.
 
-Как развернуть backend (Netlify Functions)
+Требования для auto-режима (Netlify)
 
-1. Создайте Personal Access Token (PAT) или используйте GitHub App для доступа к API. PAT должен иметь права `repo` или `public_repo` (для публичных репозиториев) и `issues` scope.
-2. Зайдите в Netlify → Site settings → Build & deploy → Environment → Environment variables и добавьте:
-   - `GITHUB_TOKEN` — ваш PAT (или GitHub App token)
-   - `FORM_SECRET` — длинная случайная строка (секрет, который будет проверяться при вызове функции)
-3. В репозитории добавлен пример функции для Netlify: `netlify/functions/create-issue.js`.
-4. Деплой на Netlify: страница будет доступна, а функция — по пути `/.netlify/functions/create-issue`.
+1. Добавьте в Netlify Site settings → Build & deploy → Environment → Environment variables:
+   - `GITHUB_TOKEN` — Personal Access Token с правами `repo`/`public_repo` и `issues` (либо токен GitHub App installation).
+   - `FORM_SECRET` — случайная строка для минимальной защиты (опционально, функция также поддерживает reCAPTCHA).
+   - `RECAPTCHA_SECRET` — (опционально) секрет reCAPTCHA с сервера, если используете reCAPTCHA.
+   - `ALLOWED_ORIGIN` — (опционально) URL вашего сайта для проверки Origin.
 
-Если вы используете Vercel
+2. Деплой: Netlify автоматически развернёт сайт и функции при пуше в репозиторий.
 
-- Положите функцию в `api/create-issue.js` и добавьте секреты в Project Environment Variables (`GITHUB_TOKEN`, `FORM_SECRET`). На Vercel endpoint будет `/api/create-issue`.
-- В `docs/index.html` по умолчанию указан путь для Netlify. Измените `serverEndpoint` на `/api/create-issue` после деплоя на Vercel.
+3. (Опционально) В `docs/index.html` можно добавить атрибут reCAPTCHA site key на body:
+
+```html
+<body data-recaptcha-site-key="ВАШ_SITE_KEY">
+  <script src="https://www.google.com/recaptcha/api.js?render=ВАШ_SITE_KEY"></script>
+  ...
+</body>
+```
 
 Безопасность
 
-- Не храните PAT в клиентском код! Всегда используйте серверную функцию и храните токен в переменных окружения (секретах).
-- Добавьте `FORM_SECRET` и требуйте его в заголовке `X-Form-Secret` в запросе, чтобы предотвратить открытый доступ.
-- При необходимости добавьте rate-limiting и логирование.
+- Не храните `GITHUB_TOKEN` в клиенте. Всегда используйте серверную функцию.
+- Для защиты от спама используйте reCAPTCHA и проверяйте `ALLOWED_ORIGIN`.
+- Для серьёзной нагрузки добавьте rate-limiting (Redis или внешняя служба).
 
-Пример запроса (JSON):
+Пример curl-запроса (тест; если функция доступна публично и без reCAPTCHA):
 
-{
-  "title": "Заголовок",
-  "body": "Описание",
-  "labels": "bug, enhancement",
-  "assignees": "ivaniventov"
-}
+curl -X POST https://<your-site>.netlify.app/.netlify/functions/create-issue \
+  -H 'Content-Type: application/json' \
+  -d '{"title":"Тестовое issue","body":"Создано через API","labels":"bug","assignees":""}'
 
-Ответ: JSON с данными созданного issue (как возвращает GitHub API).
 
-Дополнительно
-
-- Могу помочь задеплоить функцию на Netlify/Vercel и настроить секреты. Напишите, куда хотите деплоить, и я добавлю инструкции/шаблоны для CI.

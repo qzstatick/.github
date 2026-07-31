@@ -2,94 +2,12 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8" />
+  <meta http-equiv="refresh" content="0; url=./docs/index.html" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Создать issue — qzstatick/.github</title>
-  <style>
-    :root{--bg:#f7f9fb;--card:#fff;--accent:#0366d6;--muted:#6b7280}
-    body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;margin:0;background:var(--bg);color:#111}
-    .wrap{max-width:720px;margin:48px auto;padding:20px}
-    .card{background:var(--card);border-radius:8px;padding:20px;box-shadow:0 1px 3px rgba(16,24,40,0.06)}
-    h1{margin:0 0 12px;font-size:20px}
-    p.lead{margin:0 0 16px;color:var(--muted)}
-    label{display:block;margin-top:12px;font-weight:600}
-    input,textarea,select{width:100%;padding:10px;border:1px solid #e6e9ee;border-radius:6px;margin-top:6px;font-size:14px;box-sizing:border-box}
-    textarea{min-height:140px;resize:vertical}
-    .row{display:flex;gap:12px}
-    .col{flex:1}
-    .actions{display:flex;gap:12px;align-items:center;margin-top:16px}
-    button{background:var(--accent);color:white;border:none;padding:10px 14px;border-radius:6px;cursor:pointer}
-    button.secondary{background:#e6eefc;color:var(--accent)}
-    .note{margin-top:10px;color:var(--muted);font-size:13px}
-    .footer{margin-top:18px;color:var(--muted);font-size:13px}
-  </style>
+  <title>Перенаправление — qzstatick/.github</title>
+  <style>body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;padding:24px;background:#f7f9fb;color:#111}</style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card">
-      <h1>Создать issue в qzstatick/.github</h1>
-      <p class="lead">Заполните форму ниже — после отправки откроется страница создания issue на GitHub с предзаполненными полями.</p>
-
-      <form id="issueForm">
-        <label for="title">Заголовок *</label>
-        <input id="title" name="title" required placeholder="Краткое описание проблемы или предложения" />
-
-        <label for="body">Описание</label>
-        <textarea id="body" name="body" placeholder="Опишите шаги воспроизведения, ожидаемое поведение и прочее"></textarea>
-
-        <label for="labels">Метки (через запятую)</label>
-        <input id="labels" name="labels" placeholder="bug, enhancement" />
-
-        <label for="assignees">Assignees (логины, через запятую) — опционально</label>
-        <input id="assignees" name="assignees" placeholder="ivaniventov" />
-
-        <div class="actions">
-          <button type="submit">Открыть страницу создания issue</button>
-          <button type="button" class="secondary" id="clearBtn">Очистить</button>
-        </div>
-
-        <p class="note">Форма не хранит никаких данных и не использует токены. Issue будет создаваться от вашего аккаунта GitHub.</p>
-      </form>
-
-      <p class="footer">Если нужно автоматическое создание issue от имени сервиса — напишите, добавлю backend-решение.</p>
-    </div>
-  </div>
-
-  <script>
-    (function(){
-      const owner = 'qzstatick';
-      const repo = '.github';
-      const form = document.getElementById('issueForm');
-      const clearBtn = document.getElementById('clearBtn');
-
-      function encodeFields(value){
-        return encodeURIComponent(value).replace(/'/g, "%27");
-      }
-
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const titleRaw = document.getElementById('title').value.trim();
-        const bodyRaw = document.getElementById('body').value.trim();
-        const labelsRaw = document.getElementById('labels').value.trim();
-        const assigneesRaw = document.getElementById('assignees').value.trim();
-
-        if(!titleRaw){
-          alert('Пожалуйста, укажите заголовок.');
-          return;
-        }
-
-        const title = encodeFields(titleRaw);
-        const body = encodeFields(bodyRaw);
-        const labels = labelsRaw ? '&labels=' + encodeFields(labelsRaw) : '';
-        const assignees = assigneesRaw ? '&assignees=' + encodeFields(assigneesRaw) : '';
-
-        const url = `https://github.com/${owner}/${repo}/issues/new?title=${title}&body=${body}${labels}${assignees}`;
-        window.open(url, '_blank');
-      });
-
-      clearBtn.addEventListener('click', () => {
-        form.reset();
-      });
-    })();
-  </script>
+  <p>Страница перемещена в <a href="./docs/index.html">/docs/index.html</a>. Если вас не перенаправило автоматически, нажмите по ссылке.</p>
 </body>
 </html>

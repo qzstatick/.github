@@ -51,7 +51,7 @@
         <input id="assignees" name="assignees" placeholder="ivaniventov" />
 
         <div class="actions">
-          <button type="submit">Создат�� issue</button>
+          <button type="submit">Создать issue</button>
           <button type="button" class="secondary" id="clearBtn">Очистить</button>
         </div>
 
@@ -60,7 +60,7 @@
 
       <div id="result" class="result" style="display:none"></div>
 
-      <p class="footer">Если нужно — помогу задеплоить backend (Netlify/Vercel) и настроить секреты.</p>
+      <p class="footer">Если нужно — помогу задеплоить backend (Netlify) и настроить секреты.</p>
     </div>
   </div>
 
@@ -68,7 +68,7 @@
     (function(){
       const owner = 'qzstatick';
       const repo = '.github';
-      // DEFAULT server endpoint for Netlify functions. Change to your deployment URL if needed (Vercel: /api/create-issue)
+      // Netlify function path (when deployed to same Netlify site)
       const serverEndpoint = '/.netlify/functions/create-issue';
 
       const form = document.getElementById('issueForm');
@@ -83,6 +83,15 @@
         resultBox.style.display = 'block';
         resultBox.textContent = msg;
         resultBox.style.background = isError ? '#fff1f2' : '#ecfdf5';
+      }
+
+      async function getRecaptchaToken(siteKey){
+        if(!siteKey || !window.grecaptcha) return null;
+        try{
+          return await grecaptcha.execute(siteKey, {action: 'create_issue'});
+        }catch(e){
+          return null;
+        }
       }
 
       form.addEventListener('submit', async (e) => {
@@ -110,9 +119,16 @@
           return;
         }
 
-        // auto mode — POST to server endpoint
+        // auto mode — POST to Netlify function
         try{
-          const payload = { title: titleRaw, body: bodyRaw, labels: labelsRaw, assignees: assigneesRaw };
+          // optional: recaptcha site key can be set as data attribute on body: <body data-recaptcha-site-key="...">
+          const recaptchaSiteKey = document.body.getAttribute('data-recaptcha-site-key');
+          let recaptchaToken = null;
+          if(recaptchaSiteKey){
+            recaptchaToken = await getRecaptchaToken(recaptchaSiteKey);
+          }
+
+          const payload = { title: titleRaw, body: bodyRaw, labels: labelsRaw, assignees: assigneesRaw, recaptchaToken };
           const res = await fetch(serverEndpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
