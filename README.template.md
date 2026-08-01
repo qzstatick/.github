@@ -1,5 +1,4 @@
-{{ NETLIFY_HOST }}
-
+${{ env.NETLIFY_HOST }}
 [![Netlify Status](https://api.netlify.com/api/v1/badges/0ee56c45-ba2d-4b52-bb2f-a87fc02ced49/deploy-status)](https://app.netlify.com/projects/fastidious-torrone-2df317/deploys)
 
 # Форма для создания issue (с автоматическим бекендом на Netlify)
