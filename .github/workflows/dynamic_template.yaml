@@ -12,13 +12,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "📥  Fetching Repository Contents"
-        uses: actions/checkout@main
-
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: false
+          fetch-depth: 0
       - name: "💾  Github Repository Metadata"
         uses: qzstatick/action-repository-meta@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: "💫  Dynamic Template Render"
         uses: qzstatick/action-dynamic-readme@main
         with:
