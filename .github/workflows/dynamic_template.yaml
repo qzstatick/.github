@@ -5,7 +5,7 @@ on:
     branches:
       - main
   workflow_dispatch:
-
+    
 jobs:
   update_templates:
     name: "Update Templates"
