@@ -22,7 +22,7 @@ jobs:
       - name: "💫  Dynamic Template Render"
         uses: ivaniventov/action-dynamic-readme@main
         with:
-          GLOBAL_TEMPLATE_REPOSITORY: {repository-owner}/{repository-name}
+          GLOBAL_TEMPLATE_REPOSITORY: ${{ github.repository }}
           files: |
             README.template.md=README.md
           committer_name: github-actions[bot]
