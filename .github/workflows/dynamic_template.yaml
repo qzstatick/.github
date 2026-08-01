@@ -15,12 +15,12 @@ jobs:
         uses: actions/checkout@main
 
       - name: "💾  Github Repository Metadata"
-        uses: ivaniventov/action-repository-meta@main
+        uses: qzstatick/action-repository-meta@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: "💫  Dynamic Template Render"
-        uses: ivaniventov/action-dynamic-readme@main
+        uses: qzstatick/action-dynamic-readme@main
         with:
           GLOBAL_TEMPLATE_REPOSITORY: ${{ github.repository }}
           files: |
