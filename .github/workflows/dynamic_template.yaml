@@ -28,7 +28,7 @@ jobs:
           committer_name: github-actions[bot]
           committer_email: github-actions[bot]@users.noreply.github.com
           commit_message: 'docs: update readme file [skip ci]'
-          confirm_and_push: false
+          confirm_and_push: true       
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
