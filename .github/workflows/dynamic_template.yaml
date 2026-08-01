@@ -33,6 +33,7 @@ jobs:
           confirm_and_push: true       
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NETLIFY_HOST: ${{ vars.NETLIFY_HOST }}
 
       - name: Create pull request
         id: cpr
