@@ -1,0 +1,50 @@
+name: Dynamic Template
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  update_templates:
+    name: "Update Templates"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "📥  Fetching Repository Contents"
+        uses: actions/checkout@main
+
+      - name: "💾  Github Repository Metadata"
+        uses: ivaniventov/action-repository-meta@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "💫  Dynamic Template Render"
+        uses: ivaniventov/action-dynamic-readme@main
+        with:
+          GLOBAL_TEMPLATE_REPOSITORY: {repository-owner}/{repository-name}
+          files: |
+            README.template.md=README.md
+          committer_name: github-actions[bot]
+          committer_email: github-actions[bot]@users.noreply.github.com
+          commit_message: 'docs: update readme file [skip ci]'
+          confirm_and_push: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create pull request
+        id: cpr
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'docs: documentation files updated [skip ci]'
+          committer: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
+          author: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
+          signoff: false
+          branch: github-actions/repository-maintenance
+          delete-branch: true
+          title: Update documentation files
+          body: All documentation files has been updated to last recent version
+          labels: |
+            skip-changelog
+            docs
