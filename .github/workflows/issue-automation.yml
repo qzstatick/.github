@@ -19,15 +19,21 @@ jobs:
             const issueNumber = context.issue.number;
             const username = context.payload.issue.user.login;
 
-            const comment = [
-              `👋 Hey @${username} — thanks for opening an issue!`,
-              `Before we dive in, make sure to check out our [contributing guide](CONTRIBUTING.md).`,
-              `We appreciate your help! 💖`
-            ].join('\n');
+            async function createBranch(owner, repo, baseBranch, releaseBranchName) {
+              const branch = await github.rest.repos.getBranch({
+                  owner,
+                  repo,
+                  branch: baseBranch
+              });
+              const releaseBranch = await github.rest.git.createRef({
+                  owner,
+                  repo,
+                  ref: `refs/heads/${releaseBranchName}`,
+                  sha: branch.data.commit.sha
+              });
 
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: issueNumber,
-              body: comment
-            });
+              console.log(`Branch ${releaseBranchName} created successfully!`);
+            };
+
+            // Usage
+            await createBranch(context.repo.owner, context.repo.repo, 'main', 'issue--' + issueNumber);
