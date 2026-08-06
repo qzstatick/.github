@@ -1,7 +1,7 @@
 # .github/labeler.yml
 
 # Limit changed-files based labels to 5
-changed-files-labels-limit: 5
+# changed-files-labels-limit: 5
 
 # Label definitions - these are subject to the limit
 skills:
