@@ -1,0 +1,32 @@
+# .github/labeler.yml
+
+# Limit changed-files based labels to 5
+changed-files-labels-limit: 5
+
+# Label definitions - these are subject to the limit
+skills:
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - 'README.md'
+        - 'README.template.md'
+        - 'profile/README.md'
+
+netlify:
+  - changed-files:
+    - any-glob-to-any-file: 'netlify/**'
+
+docs:
+  - changed-files:
+    - any-glob-to-any-file: 'docs/**'
+
+agents:
+  - changed-files:
+    - any-glob-to-any-file: 'agents/**'
+
+workflows:
+  - changed-files:
+    - any-glob-to-any-file: '.github/workflows/**'
+
+feature:
+  - head-branch: '^feature/'
