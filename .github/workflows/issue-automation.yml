@@ -37,3 +37,16 @@ jobs:
 
             // Usage
             await createBranch(context.repo.owner, context.repo.repo, 'main', 'issue--' + issueNumber);
+            
+            const comment = [
+              `👋 Hey @${username} — thanks for opening an issue!`,
+              `Before we dive in, make sure to check out our [contributing guide](CONTRIBUTING.md).`,
+              `We appreciate your help! 💖`
+            ].join('\n');
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              body: comment
+            });
