@@ -70,21 +70,27 @@ jobs:
               core.info(`Created branch ${branchName} from main.`);
             }
 
-            await github.graphql(`
-              mutation CreateLinkedBranch($input: CreateLinkedBranchInput!) {
-                createLinkedBranch(input: $input) {
-                  linkedBranch {
-                    id
+            try {
+              await github.graphql(`
+                mutation CreateLinkedBranch($input: CreateLinkedBranchInput!) {
+                  createLinkedBranch(input: $input) {
+                    linkedBranch {
+                      id
+                    }
                   }
                 }
-              }
-            `, {
-              input: {
-                repositoryId,
-                branchName,
-                issueId
-              }
-            });
+              `, {
+                input: {
+                  repositoryId,
+                  issueId,
+                  oid: mainBranch.commit.sha,
+                  name: branchName
+                }
+              });
+              core.info(`Linked branch ${branchName} to issue #${issueNumber}.`);
+            } catch (error) {
+              core.warning(`Unable to link branch to issue via GraphQL: ${error.message}`);
+            }
 
             const branchUrl = `https://github.com/${owner}/${repo}/tree/${branchName}`;
             await github.rest.issues.createComment({
