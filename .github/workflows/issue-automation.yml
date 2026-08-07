@@ -67,3 +67,11 @@ jobs:
               });
               core.info(`Created branch ${branchName} from main.`);
             }
+
+            const branchUrl = `https://github.com/${owner}/${repo}/tree/${branchName}`;
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: issueNumber,
+              body: `🔀 Branch for this issue: [${branchName}](${branchUrl})`
+            });
