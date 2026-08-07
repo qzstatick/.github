@@ -42,11 +42,11 @@ jobs:
             const branch = await octokit.rest.repos.getBranch({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              branch: context.repo.default_branch
+              branch: 'main'
             });
             const releaseBranch = await octokit.git.createRef({
               owner: context.repo.owner,
               repo: context.repo.repo ,
-              ref: `refs/heads/${releaseBranchName = `issue-${issueNumber}`}`,
+              ref: `refs/heads/issue-${issueNumber}`,
               sha: branch.data.commit.sha
             });
