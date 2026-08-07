@@ -1,4 +1,6 @@
-[Demo](https://fastidious-torrone-2df317.netlify.app)
+[Page](https://qzstatick.github.io/.github/docs/index.html)
+
+[Netlify](https://fastidious-torrone-2df317.netlify.app)
 
 [Backlog](https://github.com/orgs/qzstatick/projects/7)
 
