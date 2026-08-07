@@ -44,7 +44,7 @@ jobs:
               repo: context.repo.repo,
               branch: 'main'
             });
-            const releaseBranch = await octokit.git.createRef({
+            const releaseBranch = await octokit.rest.git.createRef({
               owner: context.repo.owner,
               repo: context.repo.repo ,
               ref: `refs/heads/issue-${issueNumber}`,
