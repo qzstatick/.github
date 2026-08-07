@@ -75,7 +75,6 @@ jobs:
                 createLinkedBranch(input: $input) {
                   linkedBranch {
                     id
-                    name
                   }
                 }
               }
