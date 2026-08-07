@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       issues: write
+      contents: write
 
     steps:
       - name: Comment on new issue
@@ -37,16 +38,32 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const issueNumber = context.issue.number;
-            const username = context.payload.issue.user.login;
+            const branchName = `issue-${issueNumber}`;
+            const { owner, repo } = context.repo;
 
-            const branch = await octokit.rest.repos.getBranch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
+            const { data: mainBranch } = await github.rest.repos.getBranch({
+              owner,
+              repo,
               branch: 'main'
             });
-            const releaseBranch = await octokit.rest.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo ,
-              ref: `refs/heads/issue-${issueNumber}`,
-              sha: branch.data.commit.sha
-            });
+
+            try {
+              await github.rest.git.getRef({
+                owner,
+                repo,
+                ref: `heads/${branchName}`
+              });
+              core.info(`Branch ${branchName} already exists.`);
+            } catch (error) {
+              if (error.status !== 404) {
+                throw error;
+              }
+
+              await github.rest.git.createRef({
+                owner,
+                repo,
+                ref: `refs/heads/${branchName}`,
+                sha: mainBranch.commit.sha
+              });
+              core.info(`Created branch ${branchName} from main.`);
+            }
