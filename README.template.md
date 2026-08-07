@@ -1,4 +1,6 @@
-[Demo](${{ env.NETLIFY_HOST }})
+[Page](https://qzstatick.github.io/.github/docs/index.html)
+
+[Netlify](${{ env.NETLIFY_HOST }})
 
 [Backlog](https://github.com/orgs/qzstatick/projects/7)
 
