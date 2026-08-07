@@ -2,6 +2,7 @@
 
 [Backlog](https://github.com/orgs/qzstatick/projects/7)
 
+[Codespace](https://github.com/codespaces?repository_id=1318992227)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/0ee56c45-ba2d-4b52-bb2f-a87fc02ced49/deploy-status)](https://app.netlify.com/projects/fastidious-torrone-2df317/deploys)
 
 # Форма для создания issue (с автоматическим бекендом на Netlify)
