@@ -1,6 +1,8 @@
+[Organisation](https://github.com/qzstatick)
+
 [Page](https://qzstatick.github.io/.github/docs/index.html)
 
-[Netlify](${{ env.NETLIFY_HOST }})
+[Netlify](https://fastidious-torrone-2df317.netlify.app)
 
 [Backlog](https://github.com/orgs/qzstatick/projects/7)
 
