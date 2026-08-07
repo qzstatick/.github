@@ -40,6 +40,8 @@ jobs:
             const issueNumber = context.issue.number;
             const branchName = `issue-${issueNumber}`;
             const { owner, repo } = context.repo;
+            const repositoryId = context.payload.repository.node_id;
+            const issueId = context.payload.issue.node_id;
 
             const { data: mainBranch } = await github.rest.repos.getBranch({
               owner,
@@ -67,6 +69,23 @@ jobs:
               });
               core.info(`Created branch ${branchName} from main.`);
             }
+
+            await github.graphql(`
+              mutation CreateLinkedBranch($input: CreateLinkedBranchInput!) {
+                createLinkedBranch(input: $input) {
+                  linkedBranch {
+                    id
+                    name
+                  }
+                }
+              }
+            `, {
+              input: {
+                repositoryId,
+                branchName,
+                issueId
+              }
+            });
 
             const branchUrl = `https://github.com/${owner}/${repo}/tree/${branchName}`;
             await github.rest.issues.createComment({
