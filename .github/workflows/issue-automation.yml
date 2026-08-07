@@ -16,15 +16,14 @@ jobs:
       - name: Comment on new issue
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.ISSUE_AUTOMATION_PAT || secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const issueNumber = context.issue.number;
             const username = context.payload.issue.user.login;
 
             const comment = [
               `👋 Hey @${username} — thanks for opening an issue!`,
-              `A maintainer will review it soon. If you can, please include steps to reproduce the problem or the expected behavior.`,
-              `For project context, you can also review the [repository README](README.md).`,
+              `Before we dive in, make sure to check out our [contributing guide](CONTRIBUTING.md).`,
               `We appreciate your help! 💖`
             ].join('\n');
 
@@ -37,7 +36,7 @@ jobs:
       - name: Create branch for new issue
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.ISSUE_AUTOMATION_PAT || secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const issueNumber = context.issue.number;
             const branchName = `issue-${issueNumber}`;
@@ -45,12 +44,10 @@ jobs:
             const repositoryId = context.payload.repository.node_id;
             const issueId = context.payload.issue.node_id;
 
-            const { data: repositoryData } = await github.rest.repos.get({ owner, repo });
-            const defaultBranchName = repositoryData.default_branch || 'main';
-            const { data: baseBranch } = await github.rest.repos.getBranch({
+            const { data: mainBranch } = await github.rest.repos.getBranch({
               owner,
               repo,
-              branch: defaultBranchName
+              branch: 'main'
             });
 
             try {
@@ -69,9 +66,9 @@ jobs:
                 owner,
                 repo,
                 ref: `refs/heads/${branchName}`,
-                sha: baseBranch.commit.sha
+                sha: mainBranch.commit.sha
               });
-              core.info(`Created branch ${branchName} from ${defaultBranchName}.`);
+              core.info(`Created branch ${branchName} from main.`);
             }
 
             try {
@@ -87,7 +84,7 @@ jobs:
                 input: {
                   repositoryId,
                   issueId,
-                  oid: baseBranch.commit.sha,
+                  oid: mainBranch.commit.sha,
                   name: branchName
                 }
               });
