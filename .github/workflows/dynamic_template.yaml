@@ -21,6 +21,21 @@ jobs:
         uses: qzstatick/action-repository-meta@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "Get list of organisation repositories"
+        run: |
+          gh api orgs/my-org/repos --paginate --jq '.[] | "- **\(.name)**: \(.description // "без описания")"' > repos.md
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          RESPONSE: ${{ steps.inference.outputs.response }}
+        # TODO:
+        # uses: qzstatick/action-get-org-repos@main
+        # with:
+        #   org_name: ${{ github.repository_owner }}
+        #   token: ${{ secrets.GITHUB_TOKEN }}
+        #   output_file: repos.json
+
       - name: "💫  Dynamic Template Render"
         uses: qzstatick/action-dynamic-readme@main
         with:

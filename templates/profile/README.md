@@ -1,4 +1,5 @@
-## Hi there 👋
+<!-- include repos.md -->
+<!-- ## Hi there 👋
 
 **Примерный список компетенции:**
 
@@ -38,4 +39,4 @@
 🌈 [Feedback](https://github.com/orgs/qzstatick/discussions)
 
 👩‍💻 [Development](https://github.com/orgs/qzstatick/projects/8)
-
+ -->
