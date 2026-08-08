@@ -1,4 +1,4 @@
-<!-- include repos.md -->
+<!-- include /repos.md -->
 <!-- ## Hi there 👋
 
 **Примерный список компетенции:**
