@@ -26,7 +26,8 @@ jobs:
         with:
           GLOBAL_TEMPLATE_REPOSITORY: ${{ github.repository }}
           files: |
-            README.template.md=README.md
+            templates/README.md=README.md
+            templates/profile/README.md=profile/README.md
           committer_name: github-actions[bot]
           committer_email: github-actions[bot]@users.noreply.github.com
           commit_message: 'docs: update readme file [skip ci]'
