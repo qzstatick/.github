@@ -1,8 +1,3 @@
-<!-- include /repos.md -->
-<!-- ## Hi there 👋
-
-**Примерный список компетенции:**
-
 - [AIEmployee](https://github.com/qzstatick/AIEmployee)
 - [aicodespace](https://github.com/qzstatick/aicodespace)
 - [barber](https://github.com/qzstatick/barber)
@@ -33,10 +28,8 @@
 - [oxker](https://github.com/qzstatick/oxker)
 - [File-Sharing-Bot](https://github.com/qzstatick/File-Sharing-Bot)
 - [3x-ui](https://github.com/qzstatick/3x-ui)
-
-🙋‍♀️ Qzstatic
-
-🌈 [Feedback](https://github.com/orgs/qzstatick/discussions)
-
-👩‍💻 [Development](https://github.com/orgs/qzstatick/projects/8)
- -->
+- [telegram_workflow](https://github.com/qzstatick/telegram_workflow)
+- [keepassxc-browser](https://github.com/qzstatick/keepassxc-browser)
+- [firstrunwizard](https://github.com/qzstatick/firstrunwizard)
+- [telegram-bot-ruby](https://github.com/qzstatick/telegram-bot-ruby)
+- [keyserver](https://github.com/qzstatick/keyserver)
