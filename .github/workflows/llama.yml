@@ -1,0 +1,9 @@
+- uses: ai-action/ollama-action@v2
+  id: explanation
+  with:
+    model: tinyllama
+    prompt: "What's a large language model?"
+
+- run: echo "$response"
+  env:
+    response: ${{ steps.explanation.outputs.response }}
