@@ -1,0 +1,42 @@
+
+<!-- ## Hi there 👋
+
+**Примерный список компетенции:**
+
+- [AIEmployee](https://github.com/qzstatick/AIEmployee)
+- [aicodespace](https://github.com/qzstatick/aicodespace)
+- [barber](https://github.com/qzstatick/barber)
+- [.github](https://github.com/qzstatick/.github)
+- [action-dynamic-readme](https://github.com/qzstatick/action-dynamic-readme)
+- [demo-action-dynamic-readme](https://github.com/qzstatick/demo-action-dynamic-readme)
+- [action-repository-meta](https://github.com/qzstatick/action-repository-meta)
+- [action-vs-utility](https://github.com/qzstatick/action-vs-utility)
+- [actions-alpine-php](https://github.com/qzstatick/actions-alpine-php)
+- [firecrawl](https://github.com/qzstatick/firecrawl)
+- [KeeAnywhereKeeAnywhere](https://github.com/qzstatick/KeeAnywhereKeeAnywhere)
+- [kpcli](https://github.com/qzstatick/kpcli)
+- [AdGuardHome](https://github.com/qzstatick/AdGuardHome)
+- [docker-gen](https://github.com/qzstatick/docker-gen)
+- [karing-ruleset](https://github.com/qzstatick/karing-ruleset)
+- [git-credential-manager](https://github.com/qzstatick/git-credential-manager)
+- [bash-it](https://github.com/qzstatick/bash-it)
+- [Adguard-Home-Browser-Ext](https://github.com/qzstatick/Adguard-Home-Browser-Ext)
+- [airbrussh](https://github.com/qzstatick/airbrussh)
+- [youtube-dl](https://github.com/qzstatick/youtube-dl)
+- [WiFi-Widget](https://github.com/qzstatick/WiFi-Widget)
+- [react-gh-pages](https://github.com/qzstatick/react-gh-pages)
+- [private-notes](https://github.com/qzstatick/private-notes)
+- [highline](https://github.com/qzstatick/highline)
+- [usbrubberducky-payloads](https://github.com/qzstatick/usbrubberducky-payloads)
+- [bladeRF](https://github.com/qzstatick/bladeRF)
+- [docker-baseimage-gui](https://github.com/qzstatick/docker-baseimage-gui)
+- [oxker](https://github.com/qzstatick/oxker)
+- [File-Sharing-Bot](https://github.com/qzstatick/File-Sharing-Bot)
+- [3x-ui](https://github.com/qzstatick/3x-ui)
+
+🙋‍♀️ Qzstatic
+
+🌈 [Feedback](https://github.com/orgs/qzstatick/discussions)
+
+👩‍💻 [Development](https://github.com/orgs/qzstatick/projects/8)
+ -->
