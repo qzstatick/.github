@@ -1,57 +1,55 @@
 ---
-name: analyze-plan-and-create-issues
-description: "Analyze implementation plans and create GitHub issues for tracking work. Use when: converting IMPLEMENTATION_PLAN.md to issues, breaking down phases into tracked work items, syncing plan changes to issues, creating milestone-based issue structures."
-argument-hint: "Optionally specify granularity level (phase/task/item), filter by phase name, or provide custom assignee mapping"
+название: анализировать-планировать-и-создавать-проблемы
+описание: «Анализируйте планы реализации и создавайте задачи GitHub для отслеживания работы. Используйте при: преобразовании IMPLEMENTATION_PLAN.md в задачи, разбиении этапов на отслеживаемые рабочие элементы, синхронизации изменений плана с задачами, создании структур задач на основе этапов».
+подсказка аргумента: «При желании укажите уровень детализации (фаза/задача/элемент), отфильтруйте по имени фазы или укажите собственное сопоставление исполнителей»
 ---
 
-# Analyze Implementation Plan & Create Issues
+# Анализ плана реализации и создание проблем
 
-Convert a structured implementation plan into GitHub issues with automatic organization, dependency tracking, and milestone linkage.
+Преобразуйте структурированный план реализации в задачи GitHub с помощью автоматической организации, отслеживания зависимостей и привязки этапов.
 
-## Purpose
+## Цель
 
-This skill helps transform multi-phase project plans into actionable GitHub issues, enabling:
-- Automatic extraction of phases, tasks, and deliverables from markdown plans
-- Flexible granularity: track by phase, by task, or by individual checkbox items
-- Dependency analysis and validation
-- Milestone creation linked to phases
-- Issue templates with code blocks, checklists, and structured metadata
-- Optional team member assignment with role mapping
+Этот навык помогает превратить многоэтапные планы проектов в практические задачи GitHub, позволяя:
+- Автоматическое извлечение этапов, задач и результатов из планов уценки.
+- Гибкая детализация: отслеживайте по этапам, по задачам или по отдельным элементам флажков.
+- Анализ зависимостей и валидация
+- Создание вех, связанных с этапами
+- Шаблоны выпусков с блоками кода, контрольными списками и структурированными метаданными.
+- Дополнительное назначение членов команды с сопоставлением ролей.
 
-## When to Use
+## Когда использовать
 
-- You have an `IMPLEMENTATION_PLAN.md` or similar structured plan document
-- You want to convert plan items into GitHub issues for project tracking
-- You need to organize issues by phases/milestones
-- You want to maintain synchronization between a plan document and GitHub issues
-- You need to track task dependencies and generate issue templates
-- Your team prefers centralized issue tracking but maintains a detailed plan document
+- У вас есть `IMPLEMENTATION_PLAN.md` или аналогичный документ структурированного плана.
+- Вы хотите преобразовать элементы плана в задачи GitHub для отслеживания проекта.
+- Вам необходимо систематизировать проблемы по этапам/этапам.
+- Вы хотите поддерживать синхронизацию между документом плана и задачами GitHub.
+- Вам необходимо отслеживать зависимости задач и генерировать шаблоны задач.
+- Ваша команда предпочитает централизованное отслеживание проблем, но ведет документ с подробным планом.
 
-## Procedure
+## Процедура
 
-### 1. Analyze the Implementation Plan
+### 1. Анализ плана реализации
 
-First, gather details about the plan:
+Сначала соберите подробную информацию о плане:
 
-1. **Locate the plan file**: Typically `IMPLEMENTATION_PLAN.md` in the repository root or `.github/` folder.
-2. **Parse the structure**: Identify key sections:
-   - **Phases**: Major work blocks (Phase 1, Phase 2, etc.)
-   - **Tasks**: Subsections within phases (e.g., 1.1, 1.2)
-   - **Deliverables**: Specific outcomes and checkboxes (`[ ]`, `- [ ]`)
-   - **Success criteria**: Any `✅` or success checkpoints
-   - **Dependencies**: References to other tasks or external blockers
-3. **Extract metadata**:
-   - Task descriptions and goals
-   - Estimated effort or time references
-   - Implementation notes and technical decisions
-   - Required tools or libraries mentioned
-   - Code snippets or configuration examples
+1. **Найдите файл плана**: обычно `IMPLEMENTATION_PLAN.md` в корне репозитория или в папке `.github/`.
+2. **Разбор структуры**. Определите ключевые разделы:
+   - **Фазы**: основные рабочие блоки (Этап 1, Этап 2 и т. д.).
+   – **Задачи**: подразделы внутри этапов (например, 1.1, 1.2).
+   - **Результаты**: конкретные результаты и флажки (`[ ]`, `- [ ]`)
+   - **Критерии успеха**: любые ` ✅` или контрольные точки успеха.
+   - **Зависимости**: ссылки на другие задачи или внешние блокировщики.
+3. **Извлечение метаданных**:
+   - Описание задач и целей.
+   - Ориентировочные усилия или время
+   - Замечания по реализации и технические решения
+   - Упомянуты необходимые инструменты или библиотеки.
+   - Фрагменты кода или примеры конфигурации.
 
-### 2. Choose Granularity Level
+### 2. Выберите уровень детализации
 
-If the user has not specified, ask which level they prefer:
-
-```
+Если пользователь не указал, спросите, какой уровень он предпочитает:```
 🎯 Issue Granularity - Choose One:
 
 A) PHASE-LEVEL (3-6 issues)
@@ -68,54 +66,50 @@ C) ITEM-LEVEL (25-100+ issues)
    - One issue per checkbox item
    - Best for: Granular tracking, complex projects, sprint planning
    - Example: "Add models.py to src/agents/projects/"
-```
+```Используйте уровень, соответствующий рабочему процессу команды и размеру проекта.
 
-Use the level that matches the team's workflow and project size.
+### 3. Извлечение и проверка зависимостей
 
-### 3. Extract and Validate Dependencies
+Прежде чем создавать проблемы:
 
-Before creating issues:
+1. **Определите отношения блокировки**:
+   - Задачи, отмеченные знаком «требуется X» или «зависит от Y».
+   - Последовательный заказ (этап 1 перед этапом 2)
+   - Ссылки на внешние задачи или проблемы
 
-1. **Identify blocking relationships**:
-   - Tasks marked with "requires X" or "depends on Y"
-   - Sequential ordering (Phase 1 before Phase 2)
-   - References to external tasks or issues
+2. **График зависимости документов**:
+   - Сопоставьте каждую задачу/элемент с ее зависимостями.
+   - Помечать циклические зависимости (не должно возникать)
+   - Обратите внимание на необязательные и обязательные зависимости.
 
-2. **Document dependency graph**:
-   - Map each task/item to its dependencies
-   - Flag circular dependencies (should not occur)
-   - Note optional vs. mandatory dependencies
+3. **Подготовьтесь к связыванию задач**:
+   - Хранить данные о зависимостях для раздела «Ссылки» в задачах.
+   - Планируйте, какие задачи должны быть в одной и той же вехе.
 
-3. **Prepare for issue linking**:
-   - Store dependency data for "Links" section in issues
-   - Plan which tasks should be in same milestone
+### 4. Настройте метаданные задачи
 
-### 4. Configure Issue Metadata
+Соберите сведения о задании и организации:
 
-Gather assignment and organization details:
+1. **Сопоставление членов команды** (если доступно):
+   - Запросить у пользователя сопоставление роли с именем пользователя:
+     - `core_dev`: имена разработчиков для модулей ядра.
+     - `test_lead`: кому принадлежат задачи тестирования.
+     - `docs`: владелец документации
+     - «инфра»: задачи инфраструктуры/настройки.
 
-1. **Team member mapping** (if available):
-   - Ask user for role-to-username mapping:
-     - `core_dev`: developer names for Core modules
-     - `test_lead`: who owns testing tasks
-     - `docs`: documentation owner
-     - `infra`: infrastructure/setup tasks
+2. **Сопоставление этапов**:
+   - Обычно одна веха на каждом этапе
+   – Формат: «Фаза N – Название» (например, «Фаза 1 — Инфраструктура»).
 
-2. **Milestone mapping**:
-   - Usually one milestone per phase
-   - Format: `Phase N - Title` (e.g., "Phase 1 - Infrastructure")
+3. **Ярлыки**:
+   - Назначать ярлыки по категориям:
+     - `тип: установка`, `тип: ядро`, `тип: тестирование`, `тип: документы`
+     - «приоритет: высокий», «приоритет: средний», «приоритет: низкий»
+     - `статус: готов`, `статус: заблокирован`, `статус: эпический`
 
-3. **Labels**:
-   - Assign labels by category:
-     - `type:setup`, `type:core`, `type:testing`, `type:docs`
-     - `priority:high`, `priority:medium`, `priority:low`
-     - `status:ready`, `status:blocked`, `status:epic`
+### 5. Подготовьте шаблоны задач
 
-### 5. Prepare Issue Templates
-
-For each issue, structure the body as:
-
-```markdown
+Для каждой проблемы структурируйте тело следующим образом:```markdown
 ## Description
 [One-liner summary of the task]
 
@@ -142,52 +136,49 @@ For each issue, structure the body as:
 - [ ] Tests pass with >80% coverage (if applicable)
 - [ ] Documentation updated
 - [ ] PR reviewed and approved
-```
+```### 6. Пакетное создание задач
 
-### 6. Create Issues in Batch
+Выполните рабочий процесс создания задачи:
 
-Execute the issue creation workflow:
+1. **Групповые проблемы**:
+   - По фазе (если детализация на уровне фазы)
+   - По категориям задач (ядро, тесты, документация, примеры)
 
-1. **Group issues**:
-   - By phase (if phase-level granularity)
-   - By task category (core, tests, docs, examples)
+2. **Вызовите GitHub API**, чтобы создать проблемы:
+   - Используйте github-pull-request_create_pull_request или GitHub CLI («gh Issue create») для каждой проблемы.
+   - Включите ссылку на веху в тело задачи или с помощью флага вехи.
+   - Установите ответственного, если доступно сопоставление команды.
+   - Применяйте метки для категоризации и приоритета.
 
-2. **Call GitHub API** to create issues:
-   - Use `github-pull-request_create_pull_request` or GitHub CLI (`gh issue create`) for each issue
-   - Include milestone reference in issue body or via milestone flag
-   - Set assignee if team mapping is available
-   - Apply labels for categorization and priority
+3. **Проблемы со ссылками**:
+   - После создания обновите раздел «Зависимости», указав номера созданных проблем.
+   - Создание ссылок на связанные проблемы для перекрестных ссылок.
 
-3. **Link issues**:
-   - After creation, update "Dependencies" section with created issue numbers
-   - Create related-issue links for cross-references
+### 7. Создание/обновление этапов
 
-### 7. Create/Update Milestones
+Если этапы должны соответствовать контрольным точкам:
 
-If phases should map to milestones:
+1. **Создайте этап для каждого этапа** (если он не существует):
+   - Название: `Фаза N – Название фазы`
+   - Описание: Цель/сводка этапа.
+   - Срок выполнения: необязательно, зависит от графика плана, если он указан.
 
-1. **Create milestone per phase** (if not existing):
-   - Title: `Phase N - Phase Name`
-   - Description: Phase goal/summary
-   - Due date: Optional, derived from plan timeline if mentioned
+2. **Назначьте задачи контрольным точкам**:
+   - Все задачи в Фазе N → Веха «Фаза N»
+   - Обновление поля вехи проблемы после создания.
 
-2. **Assign issues to milestones**:
-   - All tasks in Phase N → Milestone "Phase N"
-   - Update issue milestone field after creation
+### 8. Проверка и отчет
 
-### 8. Verify and Report
+После создания:
 
-After creation:
+1. **Подтвердить**:
+   - Все задачи успешно созданы
+   - Зависимости правильно связаны
+   - Назначены этапы
+   - Этикетки наносятся последовательно.
+   - Задания правильные.
 
-1. **Validate**:
-   - All issues created successfully
-   - Dependencies correctly linked
-   - Milestones assigned
-   - Labels applied consistently
-   - Assignments correct
-
-2. **Generate summary report**:
-   ```
+2. **Создать сводный отчет**:```
    ✅ Created N issues from [plan-name]
    
    📊 Breakdown:
@@ -204,19 +195,15 @@ After creation:
    - Review issues in [repo link]/issues
    - Adjust priorities or assignments as needed
    - Update plan when tasks are marked complete
-   ```
+   ```3. **Укажите ссылку на доску задач**: 
+   - Ссылка на `/issues`, отфильтрованная по вехе или ярлыку.
+   – Пример: `[Просмотр проблем этапа 1](https://github.com/owner/repo/issues?q=milestone:"Фаза 1")`
 
-3. **Provide issue board link**: 
-   - Link to `/issues` filtered by milestone or label
-   - Example: `[View Phase 1 Issues](https://github.com/owner/repo/issues?q=milestone:"Phase 1")`
+## Лучшие практики
 
-## Best Practices
+### Рекомендации по структуре плана
 
-### Plan Structure Guidelines
-
-Write implementation plans following this structure for best parsing:
-
-```markdown
+Для лучшего анализа напишите планы реализации, следуя этой структуре:```markdown
 # Plan Title
 
 ## Overview
@@ -240,19 +227,15 @@ Write implementation plans following this structure for best parsing:
 ### 1.2 Another Task
 
 [Continues...]
-```
+```### Соглашения об именах проблем
 
-### Issue Naming Conventions
+- **Уровень фазы**: «Фаза N: главная цель – подцель»
+- **Уровень задачи**: `N.M – Имя задачи`
+- **Уровень элемента**: «[Фаза N] Результат — конкретный элемент»
 
-- **Phase-level**: `Phase N: Main Goal - Subgoal`
-- **Task-level**: `N.M - Task Name`
-- **Item-level**: `[Phase N] Deliverable - Specific item`
+### Объявления зависимостей
 
-### Dependency Declarations
-
-In the plan, indicate dependencies with:
-
-```markdown
+В плане укажите зависимости с:```markdown
 ### 1.3 Task with Dependencies
 
 **Prerequisites:**
@@ -260,57 +243,49 @@ In the plan, indicate dependencies with:
 - Blocks: Section 1.4
 
 [Rest of task description]
-```
+```### Руководство по выполнению заданий
 
-### Assignment Guidance
-
-For role-based assignment, define mappings:
-
-```
+Для назначения на основе ролей определите сопоставления:```
 ASSIGNMENT MAP:
 - Backend: @alice, @bob
 - Frontend: @carol, @dave
 - Testing: @eve
 - Docs: @frank
 - Infra: @grace
-```
+```### Планирование этапов
 
-### Milestone Planning
+Следите за тем, чтобы основные этапы соответствовали этапам:
+- Одна веха на каждом этапе
+- Включите номер этапа в название этапа.
+- Установите сроки, если сроки известны.
+- Архивировать вехи после завершения этапа.
 
-Keep milestones aligned with phases:
-- One milestone per phase
-- Include phase number in milestone title
-- Set due dates if timeline is known
-- Archive milestones when phase completes
+## Советы
 
-## Tips
+1. **Сначала пробный запуск**: попросите просмотреть возникшие проблемы перед их созданием, особенно для первых нескольких.
 
-1. **Dry run first**: Ask to preview generated issues before creating them, especially for the first few.
+2. **Порядок создания пакета**: сначала создайте родительские/блокирующие задачи, а затем зависимые задачи. Это гарантирует, что номера выпусков будут доступны для связывания.
 
-2. **Batch creation order**: Create parent/blocking issues first, then dependent tasks. This ensures issue numbers are available for linking.
+3. **Согласованность шаблонов**. Создавайте шаблоны с единообразной структурой на всех уровнях детализации, что упрощает последующее обновление.
 
-3. **Template consistency**: Generate templates with consistent structure across all granularity levels—makes updating easier later.
+4. **Синхронизация плана с проблемой**. При обновлении плана можно повторно проанализировать и обновить проблемы. Синхронизируйте их с помощью этого навыка или обновлений вручную.
 
-4. **Plan-to-Issue sync**: When the plan updates, re-analyze and update issues. Keep them in sync via this skill or manual updates.
+5. **Тестирование плана**. Прежде чем переходить к задачам, убедитесь, что план не имеет циклических зависимостей и все результаты четко названы.
 
-5. **Testing the plan**: Before converting to issues, validate the plan has no circular dependencies and all deliverables are named clearly.
+6. **Эпическое отслеживание**. При детализации на уровне этапов рассмотрите возможность создания эпической задачи для каждого этапа, которая связывает все проблемы с задачами.
 
-6. **Epic tracking**: If phase-level granularity, consider creating an Epic issue for each phase that links all task issues.
+7. **Стратегия маркировки**. Используйте одинаковые названия меток для всех выпусков. Рассмотрите возможность использования префиксов меток:
+   - `type:*` для категории задач
+   - `priority:*` для срочности
+   - `status:*` для текущего состояния
 
-7. **Labeling strategy**: Use consistent label names across all issues. Consider using label prefixes:
-   - `type:*` for task category
-   - `priority:*` for urgency
-   - `status:*` for current state
+## Пример: преобразование IMPLEMENTATION_PLAN.md
 
-## Example: Converting IMPLEMENTATION_PLAN.md
+**Ввод**: [IMPLEMENTATION_PLAN.md](../../../IMPLEMENTATION_PLAN.md)
 
-**Input**: [IMPLEMENTATION_PLAN.md](../../../IMPLEMENTATION_PLAN.md)
+**Выбранная степень детализации**: уровень задачи (одна проблема на пронумерованный раздел).
 
-**Granularity chosen**: Task-level (one issue per numbered section)
-
-**Output Example**:
-
-```
+**Пример вывода**:```
 ✅ Created 6 issues
 
 Issues created:
@@ -334,25 +309,23 @@ Issues created:
 - Backend developer: #47, #48
 - Test lead: #49
 - Documentation: #50
-```
+```## Интеграция с рабочим процессом
 
-## Integration with Workflow
-
-1. **During planning**: Maintain plan in `IMPLEMENTATION_PLAN.md`
-2. **Kickoff**: Use this skill to generate initial issues
-3. **Updates**: Re-run skill when plan structure changes
-4. **Closure**: Close corresponding issues as plan items complete
-5. **Retrospective**: Analyze time estimates vs. actual (stored in issue comments) to improve future plans
+1. **Во время планирования**: сохраните план в `IMPLEMENTATION_PLAN.md`
+2. **Начало**: используйте этот навык, чтобы создавать первоначальные проблемы.
+3. **Обновления**: повторный запуск навыка при изменении структуры плана.
+4. **Закрытие**. Закрывайте соответствующие проблемы по мере выполнения элементов плана.
+5. **Ретроспектива**: анализируйте предполагаемое время по сравнению с фактическим (хранится в комментариях к задаче), чтобы улучшить планы на будущее.
 
 ---
 
-## Advanced: Custom Processing
+## Дополнительно: пользовательская обработка
 
-For plans with non-standard formats or complex structures, the skill can:
+Для планов нестандартного формата или сложной структуры навык может:
 
-- Parse lists with indentation depth for hierarchy
-- Extract code blocks as implementation guides
-- Identify blockquotes as important notes
-- Convert tables into issue acceptance criteria
-- Parse inline dates as issue due dates
-- Extract GitHub usernames (@mention) for assignments
+- Анализ списков с глубиной отступов для иерархии.
+- Извлечение блоков кода в качестве руководств по реализации.
+- Определите цитаты как важные примечания
+- Преобразование таблиц в критерии приемки задач.
+- Анализировать встроенные даты как сроки выполнения задач.
+- Извлекайте имена пользователей GitHub (@mention) для заданий.
