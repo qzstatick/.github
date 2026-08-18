@@ -1,9 +1,26 @@
-- uses: ai-action/ollama-action@v2
-  id: explanation
-  with:
-    model: tinyllama
-    prompt: "What's a large language model?"
+# .github/workflows/code-review.yml
+name: Code Review
+on: pull_request
 
-- run: echo "$response"
-  env:
-    response: ${{ steps.explanation.outputs.response }}
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  code-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup ollama
+        uses: ai-action/setup-ollama@v1
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Code review comment
+        run: |
+          PROMPT='Code review the changes below:'
+          RESPONSE=$(ollama run codellama "$PROMPT\n$(gh pr diff $PR_NUMBER)")
+          gh pr comment $PR_NUMBER --body "$RESPONSE"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
