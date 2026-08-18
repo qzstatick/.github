@@ -27,7 +27,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.14.2"
 
       - name: Detect changed markdown files
         id: changed
@@ -70,19 +70,29 @@ jobs:
           files = [p.strip() for p in os.environ["FILES"].split() if p.strip()]
           translator = GoogleTranslator(source="auto", target="ru")
 
-          def translate_text(text: str) -> str:
-              parts = re.split(r"(```[\s\S]*?```)", text)
-              translated = []
-              for idx, part in enumerate(parts):
-                  if idx % 2 == 1:
-                      translated.append(part)
-                      continue
-                  if part.strip():
-                      translated.append(translator.translate(part))
-                  else:
-                      translated.append(part)
-              return "".join(translated)
 
+          def translate_text(text: str) -> str:
+            parts = re.split(r"(```[\s\S]*?```)", text)
+            translated = []
+            for idx, part in enumerate(parts):
+                if idx % 2 == 1:
+                    translated.append(part)
+                    continue
+                if part.strip():
+                    # Retry up to 3 times with backoff
+                    for attempt in range(3):
+                        try:
+                            translated.append(translator.translate(part))
+                            break
+                        except Exception as e:
+                            if attempt == 2:
+                                raise
+                            sleep(2 ** attempt)  # Exponential backoff
+                else:
+                    translated.append(part)
+            return "".join(translated)
+
+            
           for file_path in files:
               src = Path(file_path)
               if not src.exists():
@@ -105,7 +115,7 @@ jobs:
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
           git add --all
 
