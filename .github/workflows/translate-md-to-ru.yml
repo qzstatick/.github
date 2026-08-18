@@ -1,0 +1,138 @@
+name: Translate Markdown to Russian
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - "**/*.md"
+      - "**/*.MD"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  translate_markdown:
+    if: github.event.pull_request.head.repo.full_name == github.repository || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref || github.ref_name }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Detect changed markdown files
+        id: changed
+        shell: bash
+        run: |
+          set -e
+
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            mapfile -t files < <(find . -type f \( -iname "*.md" -o -iname "*.MD" \) -print | sort)
+            printf '%s\n' "${files[@]}" | sed 's#^\./##' > /tmp/md_files.txt
+          else
+            git fetch origin "${{ github.event.pull_request.base.ref }}" --depth=1
+            git diff --name-only --diff-filter=AM "origin/${{ github.event.pull_request.base.ref }}"...HEAD -- '*.md' '*.MD' | sed 's#^\./##' > /tmp/md_files.txt || true
+          fi
+
+          if [[ ! -s /tmp/md_files.txt ]]; then
+            echo "files=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "files=$(tr '\n' ' ' </tmp/md_files.txt)" >> "$GITHUB_OUTPUT"
+
+      - name: Install translation dependency
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install deep-translator
+
+      - name: Translate markdown to Russian
+        if: steps.changed.outputs.files != ''
+        shell: bash
+        env:
+          FILES: ${{ steps.changed.outputs.files }}
+        run: |
+          python - <<'PY'
+          import os
+          import re
+          from deep_translator import GoogleTranslator
+
+          files = [p.strip() for p in os.environ["FILES"].split() if p.strip()]
+          translator = GoogleTranslator(source="auto", target="ru")
+
+          def translate_text(text: str) -> str:
+              parts = re.split(r"(```[\s\S]*?```)", text)
+              translated = []
+              for idx, part in enumerate(parts):
+                  if idx % 2 == 1:
+                      translated.append(part)
+                      continue
+                  if part.strip():
+                      translated.append(translator.translate(part))
+                  else:
+                      translated.append(part)
+              return "".join(translated)
+
+          for file_path in files:
+              if not os.path.exists(file_path):
+                  continue
+
+              with open(file_path, "r", encoding="utf-8") as f:
+                  original = f.read()
+
+              if not original.strip():
+                  continue
+
+              translated = translate_text(original)
+              if translated != original:
+                  with open(file_path, "w", encoding="utf-8") as f:
+                      f.write(translated)
+          PY
+
+      - name: Commit translated files
+        if: steps.changed.outputs.files != ''
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add --all
+
+          if git diff --cached --quiet; then
+            echo "No translation changes needed."
+            exit 0
+          fi
+
+          git commit -m "chore: translate markdown files to Russian"
+          git push origin "HEAD:${{ github.head_ref || github.ref_name }}"
+
+      - name: Comment in PR
+        if: github.event_name == 'pull_request' && steps.changed.outputs.files != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const files = `${{ steps.changed.outputs.files }}`.split(/\s+/).filter(Boolean);
+            const body = [
+              '✅ Перевод Markdown на русский выполнен.',
+              '',
+              'Обновлены файлы:',
+              ...files.map(f => `- ${f}`),
+              '',
+              'Если хотите, могу также добавить отдельную версию файла с суффиксом `.ru.md`, не перезаписывая исходный документ.'
+            ].join('\n');
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body
+            });
