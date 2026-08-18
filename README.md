@@ -1,5 +1,3 @@
-[![Code Review](https://github.com/qzstatick/.github/actions/workflows/code-review.yml/badge.svg)](https://github.com/qzstatick/.github/actions/workflows/code-review.yml)
-
 [Organisation](https://github.com/qzstatick)
 
 [Page](https://qzstatick.github.io/.github/docs/index.html)
