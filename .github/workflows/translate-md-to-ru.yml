@@ -64,6 +64,7 @@ jobs:
           python - <<'PY'
           import os
           import re
+          from pathlib import Path
           from deep_translator import GoogleTranslator
 
           files = [p.strip() for p in os.environ["FILES"].split() if p.strip()]
@@ -83,19 +84,20 @@ jobs:
               return "".join(translated)
 
           for file_path in files:
-              if not os.path.exists(file_path):
+              src = Path(file_path)
+              if not src.exists():
                   continue
 
-              with open(file_path, "r", encoding="utf-8") as f:
-                  original = f.read()
-
+              original = src.read_text(encoding="utf-8")
               if not original.strip():
                   continue
 
               translated = translate_text(original)
-              if translated != original:
-                  with open(file_path, "w", encoding="utf-8") as f:
-                      f.write(translated)
+              if translated == original:
+                  continue
+
+              target = src.with_name(f"{src.stem}.ru{src.suffix}")
+              target.write_text(translated, encoding="utf-8")
           PY
 
       - name: Commit translated files
@@ -121,13 +123,18 @@ jobs:
         with:
           script: |
             const files = `${{ steps.changed.outputs.files }}`.split(/\s+/).filter(Boolean);
+            const translatedFiles = files.map(f => {
+              const p = f.replace(/\.md$/i, '.ru.md');
+              return p;
+            });
+
             const body = [
               '✅ Перевод Markdown на русский выполнен.',
               '',
-              'Обновлены файлы:',
-              ...files.map(f => `- ${f}`),
+              'Созданы отдельные файлы:',
+              ...translatedFiles.map(f => `- ${f}`),
               '',
-              'Если хотите, могу также добавить отдельную версию файла с суффиксом `.ru.md`, не перезаписывая исходный документ.'
+              'Исходные .md файлы не изменены.'
             ].join('\n');
 
             await github.rest.issues.createComment({
